@@ -1,3 +1,7 @@
+import React from "react";
+
+import { toPng } from "html-to-image";
+
 export default function PosterOptions({
   tracksSize,
   setTracksSize,
@@ -13,6 +17,21 @@ export default function PosterOptions({
   albumFSize: number;
   setAlbumFSize: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const onDownloadButton = () => {
+    var element = document.getElementById("poster-preview");
+
+    if (element === null) {
+      return;
+    }
+
+    toPng(element).then(function (dataUrl) {
+      var link = document.createElement("a");
+      link.download = "my-image-name.jpeg";
+      link.href = dataUrl;
+      link.click();
+    });
+  };
+
   return (
     <>
       <div className="h-[900px] w-[600px]">
@@ -47,6 +66,7 @@ export default function PosterOptions({
             value={albumFSize}
             onChange={(e) => setAlbumFSize(+e.target.value)}
           />
+          <button onClick={onDownloadButton}>Click me</button>
         </div>
       </div>
     </>

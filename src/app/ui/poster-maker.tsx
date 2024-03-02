@@ -9,6 +9,7 @@ export default function PosterMaker() {
   const [tracksSize, setTracksSize] = useState<number>(1);
   const [artistFSize, setArtistFSize] = useState<number>(3);
   const [albumFSize, setAlbumFSize] = useState<number>(3.5);
+
   return (
     <div className="flex">
       <PosterOptions

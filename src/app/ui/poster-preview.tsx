@@ -12,6 +12,7 @@ export default function PosterPreview({
 }) {
   return (
     <div
+      id="poster-preview"
       className={
         "text-black bg-white h-[900px] w-[900px] flex justify-center pt-10"
       }
