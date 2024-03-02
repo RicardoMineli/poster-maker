@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+# mock images
+/public/Example
+
 # next.js
 /.next/
 /out/
