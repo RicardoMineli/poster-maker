@@ -1,91 +1,109 @@
 import Image from "next/image";
-import Earth2AlbumCover from "@/../public/Example/Earth2AlbumCover.jpg";
+import { useState } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton";
+
+import { Album } from "@/app/utils/albumType";
 
 export default function PosterPreview({
+  albumData,
   tracksSize,
   artistFSize,
   albumFSize,
 }: {
+  albumData: Album;
   tracksSize: number;
   artistFSize: number;
   albumFSize: number;
 }) {
+  const displayTracks = albumData.tracks.track.map((track, order) => (
+    <div
+      key={order + 1}
+      className={`mb-1`}
+      style={{ fontSize: `${tracksSize}rem` }}
+    >
+      {order + 1} {track.name}
+    </div>
+  ));
+
+  const [reveal, setReveal] = useState(false);
+  const visibility = reveal ? "visible" : "hidden";
+  const loader = reveal ? "none" : "inline-block";
+
   return (
     <div
       id="poster-preview"
       className={
-        "text-black bg-white h-[900px] w-[900px] flex justify-center pt-10"
+        "text-black bg-white flex flex-col justify-center items-center "
       }
     >
-      <div id="posterContent">
+      <div id="imageDiv" className="">
         <Image
           id="albumCover"
-          className="border-4 border-black"
-          src={Earth2AlbumCover}
+          className={"block w-4/5 mx-auto my-[5%] border-black border-4"}
+          style={{ visibility }}
+          src={albumData.image[0]["#text"].replace("34s", "arg0")}
           alt={"Test image"}
+          height={1500}
+          width={1500}
+          onError={() => setReveal(true)}
+          onLoad={() => setReveal(true)}
+        ></Image>
+        {/* <Skeleton
+          className="relative"
+          style={{
+            display: loader,
+          }}
           height={500}
           width={500}
-        ></Image>
-
-        <div className="grid grid-cols-3 mt-2">
-          <div
-            id="artistName"
-            className="col-start-1 col-span-2"
-            style={{ container: "tracks / inline-size" }}
+        /> */}
+      </div>
+      <div className="grid grid-cols-3 w-4/5 mx-auto my-[3%]">
+        <div id="artistName" className="col-start-1 col-span-2">
+          <p
+            className="leading-none font-bold text-left"
+            style={{ fontSize: `${artistFSize}rem` }}
           >
-            <p
-              className="leading-none font-bold text-left"
-              style={{ fontSize: `${artistFSize}rem` }}
-            >
-              Earth
-            </p>
-          </div>
-          <div
-            id="albumName"
-            className="col-start-1 col-span-2"
-            style={{ container: "tracks / inline-size" }}
-          >
-            <p
-              className="leading-none font-bold text-left"
-              style={{ fontSize: `${albumFSize}rem` }}
-            >
-              Earth 2
-            </p>
-          </div>
-          <div
-            id="lineDetail"
-            className="w-full h-7 rounded-lg border-2 col-start-3 row-start-1
-          bg-gradient-to-r from-blue-600 to-green-600"
-          />
-          <div id="albumDetails" className="">
-            <p className="text-xl font-medium text-right">
-              <span className="text-base">Length</span> 1h 13min
-            </p>
-            <p className="text-2xl font-medium text-right">
-              <span className="text-base">Released</span> 1993
-            </p>
-          </div>
+            {albumData.artist}
+          </p>
         </div>
-
-        <div className="flex items-center pt-2 pb-2">
-          <div className="flex-1 border-t-2 border-black"></div>
-        </div>
-
         <div
-          id="albumTracks"
-          className="flex flex-col text-pretty "
+          id="albumName"
+          className="col-start-1 col-span-2"
           style={{ container: "tracks / inline-size" }}
         >
-          <div className={`mb-1`} style={{ fontSize: `${tracksSize}rem` }}>
-            1 Seven Angels
-          </div>
-          <div className="mb-1" style={{ fontSize: `${tracksSize}rem` }}>
-            2 Theeth Of Lions Rule The Divine
-          </div>
-          <div className="mb-1" style={{ fontSize: `${tracksSize}rem` }}>
-            3 Like Gold And Faceted
-          </div>
+          <p
+            className="leading-none font-bold text-left"
+            style={{ fontSize: `${albumFSize}rem` }}
+          >
+            {albumData.name}
+          </p>
         </div>
+        <div
+          id="lineDetail"
+          className="w-full h-7 rounded-lg border-2 col-start-3 row-start-1
+          bg-gradient-to-r from-blue-600 to-green-600"
+        />
+        <div id="albumDetails" className="">
+          <p className="text-xl font-medium text-right">
+            <span className="text-base">Length</span> 1h 13min
+          </p>
+          <p className="text-2xl font-medium text-right">
+            <span className="text-base">Released</span> 1993
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center pt-2 pb-2 w-4/5 mx-auto">
+        <div className="flex-1 border-t-2 border-black"></div>
+      </div>
+
+      <div
+        id="albumTracks"
+        className="grid grid-cols-2 text-pretty w-4/5 mx-auto "
+        style={{ container: "tracks / inline-size" }}
+      >
+        {displayTracks}
       </div>
     </div>
   );
